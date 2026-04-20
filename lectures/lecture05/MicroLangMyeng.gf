@@ -3,11 +3,66 @@
 concrete MicroLangMyeng of MicroLang = open MicroResMyeng, Prelude in {
 
   lincat
+    Utt = {s : Str} ;
+    S = {s : Str} ;
+
+    NP = {s : Case => Str ; n : Number} ;
+    VP = {s : Number => Str} ;
+    CN = {s : Number => Str} ;
+    Comp = {s : Str} ;
+    AP = {s : Str} ;
+    Det = {s : Str ; n : Number} ;
+    Prep = {s : Str} ;
+    Pron = {s : Case => Str ; n : Number} ;
+    
     V = Verb ;
     V2 = Verb2 ;
     A = Adjective ;
     N = Noun ;
     Adv = Adverb ;
+
+lin
+    UttS s = s ;
+    UttNP np = {s = np.s ! Nom} ;
+
+    PredVPS np vp = {s = np.s ! Nom ++ vp.s ! np.n} ;
+
+-- Verb
+    UseV verb = {s = \\n => presentVerb verb n} ;
+
+    ComplV2 verb np = {s = \\n => presentVerb verb n ++ verb.prep ++ np.s ! Acc} ;
+
+    UseComp comp = {s = \\n => copula n ++ comp.s} ;
+    CompAP ap = ap ;
+    AdvVP vp adv = {s = \\n => vp.s ! n ++ adv.s} ;
+
+-- Noun
+    DetCN det cn = {s = \\c => det.s ++ cn.s ! det.n ; n = det.n} ;
+    UsePron pron = pron ;
+
+    a_Det = {s = "a" ; n = Sg} ;
+    aPl_Det = {s = "" ; n = Pl} ;
+    the_Det = {s = "the" ; n = Sg} ;
+    thePl_Det = {s = "the" ; n = Pl} ;
+    UseN noun = noun ;
+    AdjCN ap cn = {s = \\n => ap.s ++ cn.s ! n} ;
+
+-- Adjective
+    PositA adj = adj ;
+
+{-
+-- Adverb
+    PrepNP    : Prep -> NP -> Adv ;     -- in the house
+
+-- Structural
+    in_Prep   : Prep ;
+    on_Prep   : Prep ;
+    with_Prep : Prep ;
+-}
+    he_Pron = {s = table {Nom => "he" ; Acc => "him"} ; n = Sg} ;
+    she_Pron = {s = table {Nom => "she" ; Acc => "her"} ; n = Sg} ;
+    they_Pron = {s = table {Nom => "they" ; Acc => "them"} ; n = Pl} ;
+ 
 
 -----------------------------------------------------
 ---------------- Lexicon part -----------------------

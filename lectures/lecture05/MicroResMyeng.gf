@@ -44,6 +44,8 @@ param
 
   VerbForm = Inf | Pres3Sg | Past | PastPart | PresPart ;
 
+  Case = Nom | Acc ;
+
 oper
   Noun : Type = {s : Number => Str} ;
 
@@ -68,7 +70,7 @@ oper
   Adverb : Type = {s : Str} ;
 
   Verb : Type = {s : VerbForm => Str} ;
-  
+
   -- constructor; worst case paradigm
   mkVerb : (sing, sings, sang, sung, singing : Str) -> Verb
      = \sing, sings, sang, sung, singing -> {
@@ -111,5 +113,19 @@ oper
 	} ;
 
   Verb2 : Type = {s : VerbForm => Str ; prep : Str} ;
+
+-- auxiliary for syntax
+  presentVerb : Verb -> Number -> Str = \verb, n ->
+    case n of {
+      Sg => verb.s ! Pres3Sg ;
+      Pl => verb.s ! Inf
+      } ;
+
+  copula : Number -> Str = \n ->
+    case n of {
+      Sg => "is" ;
+      Pl => "are"
+      } ;
+
 
 }
